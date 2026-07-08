@@ -1,0 +1,11 @@
+export default {
+  "$schema": "http://json-schema.org/draft-06/schema",
+  "type": "object",
+  "properties": {
+    "button_label": {
+      "type": "string"
+    }
+  },
+  "required": ["button_label"],
+  "additionalProperties": false
+} as const

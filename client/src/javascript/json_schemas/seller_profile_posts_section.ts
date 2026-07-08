@@ -1,0 +1,15 @@
+export default {
+  "$schema": "http://json-schema.org/draft-06/schema",
+  "type": "object",
+  "properties": {
+    "shown_posts": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      },
+      "uniqueItems": true
+    }
+  },
+  "required": ["shown_posts"],
+  "additionalProperties": false
+} as const

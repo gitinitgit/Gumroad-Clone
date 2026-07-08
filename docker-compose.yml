@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:7
+    container_name: gumroad-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: gumroad-clone
+
+  redis:
+    image: redis:7-alpine
+    container_name: gumroad-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    container_name: gumroad-server
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    environment:
+      # Use the docker network redis URL
+      - REDIS_URL=redis://redis:6379
+      # If you want to use the local docker mongodb instead of Atlas from .env, uncomment the line below:
+      # - MONGO_URI=mongodb://mongodb:27017/gumroad-clone
+    depends_on:
+      - mongodb
+      - redis
+
+  client:
+    build:
+      context: .
+      dockerfile: Dockerfile.client
+    container_name: gumroad-client
+    restart: unless-stopped
+    ports:
+      - "5173:80"
+    depends_on:
+      - server
+
+volumes:
+  mongo_data:
+  redis_data:

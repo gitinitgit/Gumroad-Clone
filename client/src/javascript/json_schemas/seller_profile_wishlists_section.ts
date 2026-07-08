@@ -1,0 +1,15 @@
+export default {
+  "$schema": "http://json-schema.org/draft-06/schema",
+  "type": "object",
+  "properties": {
+    "shown_wishlists": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      },
+      "uniqueItems": true
+    }
+  },
+  "required": ["shown_wishlists"],
+  "additionalProperties": false
+} as const

@@ -1,0 +1,12 @@
+export default {
+  "$schema": "http://json-schema.org/draft-06/schema",
+  "type": "object",
+  "properties": {
+    "text": {
+      "type": "object",
+      "default": {}
+    }
+  },
+  "required": ["text"],
+  "additionalProperties": false
+} as const
