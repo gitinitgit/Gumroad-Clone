@@ -53,16 +53,17 @@ export class ProductService {
       ...sanitizedInput,
       slug,
       creator: creatorId,
+      status: PRODUCT_STATUS.PUBLISHED,
+      publishedAt: new Date(),
     });
 
     // Auto-upgrade buyer to creator on first product creation
-    await User.findOneAndUpdate(
-      { _id: creatorId, role: ROLES.BUYER },
-      { role: ROLES.CREATOR }
-    );
+    await User.findByIdAndUpdate(creatorId, { role: ROLES.CREATOR });
 
     // Invalidate discovery caches since a new product exists
     await CacheService.delPattern('discover:*');
+    await CacheService.del('featured');
+    await CacheService.del('trending');
 
     return product;
   }

@@ -6,9 +6,9 @@ import ProductCard from '../components/ProductCard';
 
 const FALLBACK_FEATURED = [
   {
-    _id: 'fullstack-nextjs-course',
+    _id: 'full-stack-nextjs-build-and-deploy',
     name: 'Full-Stack Next.js — Build & Deploy',
-    slug: 'fullstack-nextjs-course',
+    slug: 'full-stack-nextjs-build-and-deploy',
     price: 6999,
     coverImage: '/asset/assets/images/products/fullstack-nextjs.png',
     type: 'course',
@@ -21,9 +21,9 @@ const FALLBACK_FEATURED = [
     tags: ['demo', 'nextjs', 'react'],
   },
   {
-    _id: 'figma-masterclass',
+    _id: 'figma-masterclass-zero-to-pro',
     name: 'Figma Masterclass — Zero to Pro',
-    slug: 'figma-masterclass',
+    slug: 'figma-masterclass-zero-to-pro',
     price: 2499,
     coverImage: '/asset/assets/images/products/figma-masterclass.png',
     type: 'course',
@@ -36,9 +36,9 @@ const FALLBACK_FEATURED = [
     tags: ['demo', 'figma', 'design'],
   },
   {
-    _id: 'react-component-library',
+    _id: 'react-component-library-pro',
     name: 'React Component Library Pro',
-    slug: 'react-component-library',
+    slug: 'react-component-library-pro',
     price: 3499,
     coverImage: '/asset/assets/images/products/react-components.png',
     type: 'digital',

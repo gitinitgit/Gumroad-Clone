@@ -39,27 +39,65 @@ export const authMiddleware = async (req: AuthRequest, _res: Response, next: Nex
     let user = await User.findOne({ clerkId: clerkUserId });
 
     if (!user) {
-      const clerkUser = await clerkClient.users.getUser(clerkUserId);
+      try {
+        const clerkUser = await clerkClient.users.getUser(clerkUserId);
+        const email = clerkUser.emailAddresses[0]?.emailAddress || `user-${clerkUserId}@gumroad.local`;
+        const baseUsername = clerkUser.username || email.split('@')[0] || `user_${Date.now().toString(36)}`;
+        let username = baseUsername.toLowerCase().replace(/[^a-z0-9_]/g, '');
 
-      user = await User.create({
-        clerkId: clerkUserId,
-        name: `${clerkUser.firstName || ''} ${clerkUser.lastName || ''}`.trim() || 'User',
-        email: clerkUser.emailAddresses[0]?.emailAddress || '',
-        username: clerkUser.username || clerkUser.emailAddresses[0]?.emailAddress.split('@')[0] || `user-${Date.now().toString(36)}`,
-        avatar: clerkUser.imageUrl || '/assets/images/gumroad-default-avatar-5.png',
-        isVerified: true,
-      });
+        const existingUserWithUsername = await User.findOne({ username });
+        if (existingUserWithUsername) {
+          username = `${username}_${Date.now().toString(36).slice(-4)}`;
+        }
+
+        user = await User.findOneAndUpdate(
+          { clerkId: clerkUserId },
+          {
+            $setOnInsert: {
+              clerkId: clerkUserId,
+              name: `${clerkUser.firstName || ''} ${clerkUser.lastName || ''}`.trim() || clerkUser.username || 'Creator',
+              email,
+              username,
+              avatar: clerkUser.imageUrl || '/assets/images/gumroad-default-avatar-5.png',
+              role: 'creator',
+              isVerified: true,
+            },
+          },
+          { upsert: true, new: true }
+        );
+      } catch {
+        // Fallback user creation if Clerk API call fails
+        const fallbackUsername = `creator_${clerkUserId.slice(-6)}`;
+        user = await User.findOneAndUpdate(
+          { clerkId: clerkUserId },
+          {
+            $setOnInsert: {
+              clerkId: clerkUserId,
+              name: 'Creator',
+              email: `user-${clerkUserId.slice(-6)}@gumroad.local`,
+              username: fallbackUsername,
+              avatar: '/assets/images/gumroad-default-avatar-5.png',
+              role: 'creator',
+              isVerified: true,
+            },
+          },
+          { upsert: true, new: true }
+        );
+      }
+    }
+
+    if (!user) {
+      throw ApiError.unauthorized('Failed to load user profile');
     }
 
     (req as any).user = {
       userId: (user as any)._id.toString(),
       clerkId: clerkUserId,
-      role: user.role,
+      role: user.role || 'creator',
     };
 
     next();
   } catch (error: any) {
-
     if (error instanceof ApiError) {
       next(error);
     } else {

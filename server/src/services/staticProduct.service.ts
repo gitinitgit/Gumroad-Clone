@@ -216,7 +216,13 @@ export class StaticProductService {
 
   static async getBySlug(slug: string): Promise<StaticProduct> {
     const products = await this.getAllRaw();
-    const product = products.find(p => p.slug === slug);
+    const normalizedTarget = slug.toLowerCase().replace(/[^a-z0-9]/g, '');
+    const product = products.find(p => 
+      p.slug === slug || 
+      p._id === slug ||
+      (p.slug && p.slug.toLowerCase().replace(/[^a-z0-9]/g, '') === normalizedTarget) ||
+      (p.name && p.name.toLowerCase().replace(/[^a-z0-9]/g, '') === normalizedTarget)
+    );
     if (!product) throw new Error('Product not found');
     return product;
   }

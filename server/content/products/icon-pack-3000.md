@@ -1,5 +1,6 @@
 ---
 name: "Premium Icon Pack — 3000+ Icons"
+slug: "premium-icon-pack-3000-icons"
 price: 999
 currency: "INR"
 type: "digital"

@@ -1,5 +1,6 @@
 ---
 name: "UI Design System Kit"
+slug: "ui-design-system-kit"
 price: 4999
 currency: "INR"
 type: "digital"

@@ -1,5 +1,6 @@
 ---
 name: "React Component Library Pro"
+slug: "react-component-library-pro"
 price: 3499
 currency: "INR"
 type: "digital"

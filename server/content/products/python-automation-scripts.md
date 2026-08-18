@@ -1,5 +1,6 @@
 ---
 name: "Python Automation Scripts Bundle"
+slug: "python-automation-scripts-bundle"
 price: 1499
 currency: "INR"
 type: "digital"

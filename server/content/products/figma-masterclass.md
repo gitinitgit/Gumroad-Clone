@@ -1,5 +1,6 @@
 ---
 name: "Figma Masterclass — Zero to Pro"
+slug: "figma-masterclass-zero-to-pro"
 price: 2499
 currency: "INR"
 type: "course"

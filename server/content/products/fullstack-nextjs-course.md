@@ -1,5 +1,6 @@
 ---
 name: "Full-Stack Next.js — Build & Deploy"
+slug: "full-stack-nextjs-build-and-deploy"
 price: 6999
 currency: "INR"
 type: "course"
