@@ -17,6 +17,7 @@
     "build:client": "npm run build --workspace=client",
     "start": "npm run start --workspace=server",
     "seed": "npm run seed --workspace=server",
+    "seed:products": "npm run seed:products --workspace=server",
     "clean": "rimraf node_modules server/node_modules client/node_modules shared/node_modules",
     "lint": "concurrently \"npm run lint --workspace=server\" \"npm run lint --workspace=client\""
   },
