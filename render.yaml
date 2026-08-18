@@ -1,0 +1,56 @@
+# Render Blueprint (Infrastructure-as-Code)
+# https://render.com/docs/blueprint-spec
+
+services:
+  # ── Backend Express API ──
+  - type: web
+    name: gumroad-server
+    env: docker
+    dockerfilePath: ./Dockerfile.server
+    dockerContext: .
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      - key: MONGO_URI
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CLIENT_URL
+        sync: false
+      - key: REDIS_HOST
+        fromService:
+          type: keyvalue
+          name: gumroad-redis
+          property: host
+      - key: REDIS_PORT
+        fromService:
+          type: keyvalue
+          name: gumroad-redis
+          property: port
+
+  # ── Frontend React Client ──
+  - type: web
+    name: gumroad-client
+    env: docker
+    dockerfilePath: ./Dockerfile.client
+    dockerContext: .
+    plan: free
+    healthCheckPath: /healthz
+    envVars:
+      - key: PORT
+        value: 80
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: gumroad-server
+          property: host
+
+  # ── Redis Cache (Render Key-Value) ──
+  - type: keyvalue
+    name: gumroad-redis
+    plan: free
+    ipAllowList: []
