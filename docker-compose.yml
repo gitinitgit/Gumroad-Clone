@@ -32,8 +32,9 @@ services:
     env_file:
       - .env
     environment:
-      # Use the docker network redis URL
-      - REDIS_URL=redis://redis:6379
+      # Override Redis connection to use Docker service name
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
       # If you want to use the local docker mongodb instead of Atlas from .env, uncomment the line below:
       # - MONGO_URI=mongodb://mongodb:27017/gumroad-clone
     depends_on:

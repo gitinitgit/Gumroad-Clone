@@ -4,7 +4,7 @@ import matter from 'gray-matter';
 import slugify from 'slugify';
 import { logger } from '../utils/logger';
 
-const PRODUCTS_DIR = path.join(process.cwd(), 'content', 'products');
+const PRODUCTS_DIR = path.join(__dirname, '../../content/products');
 
 export interface StaticReview {
   author: string;

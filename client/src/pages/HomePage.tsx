@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, ShoppingCart } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import api from '../services/api';
 
 const features = [
@@ -68,21 +68,14 @@ export default function HomePage() {
   return (
     <div>
       {/* Hero Section */}
-      <section className="relative overflow-hidden py-20 md:py-32 px-4">
-        <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <section className="relative overflow-hidden min-h-screen flex items-center px-4">
+        <div className="max-w-5xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
           <div className="text-left">
-            <div className="inline-block mb-6">
-              <span className="badge-pink text-sm animate-pulse-glow">$</span>
-            </div>
-            <h1 className="text-5xl md:text-7xl font-bold leading-tight mb-6 animate-fade-in-up">
-              Go from <span className="text-pink">zero</span> to{' '}
-              <span className="bg-gumroad-black text-gumroad-white px-3 py-1 rounded-gum inline-block">$1</span>
-            </h1>
-            <p className="text-lg md:text-xl text-gray-600 max-w-xl mb-10 animate-fade-in-up delay-200">
-              Gumroad is the easiest way to sell digital products, memberships, and courses.
-              Earn your first dollar online today.
+            <p className="text-lg md:text-xl text-gray-600 max-w-xl mb-8">
+              Gumroad is the easiest way to sell digital products,
+              memberships, and courses.
             </p>
-            <div className="flex flex-col sm:flex-row items-start gap-4 animate-fade-in-up delay-300">
+            <div className="flex flex-col sm:flex-row items-start gap-4">
               <Link to="/signup" className="btn-primary text-lg !px-10 !py-4">
                 Start selling <ArrowRight size={20} />
               </Link>
@@ -92,19 +85,19 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="hidden lg:block relative animate-fade-in-up delay-400">
+          <div className="hidden lg:flex justify-center">
             <img
               src="/asset/assets/images/about/new-sale.svg"
               alt="Gumroad - Make a sale"
-              className="w-full max-w-md mx-auto"
+              className="w-full max-w-md"
             />
           </div>
         </div>
       </section>
 
       {/* Featured Products Section */}
-      <section className="py-20 px-4 bg-white border-y-2 border-gumroad-black">
-        <div className="max-w-5xl mx-auto">
+      <section className="min-h-screen flex items-center px-4 bg-white border-y-2 border-gumroad-black">
+        <div className="max-w-5xl mx-auto w-full">
           <div className="flex justify-between items-end mb-10">
             <div>
               <h2 className="text-3xl font-bold mb-2">Featured Products</h2>
@@ -143,8 +136,8 @@ export default function HomePage() {
 
 
       {/* Features Grid */}
-      <section className="py-20 md:py-28 px-4 relative">
-        <div className="max-w-5xl mx-auto relative z-10">
+      <section className="min-h-screen flex items-center px-4 relative">
+        <div className="max-w-5xl mx-auto w-full relative z-10">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">Everything you need to sell</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-14">
             {features.map((feature) => (
