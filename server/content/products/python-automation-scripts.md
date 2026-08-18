@@ -9,7 +9,8 @@ coverImage: "/asset/assets/images/products/python-automation.png"
 status: "published"
 isFeatured: false
 isTrending: true
-tags: ["python", "automation", "scripts", "web-scraping", "productivity"]
+isDemo: true
+tags: ["demo", "python", "automation", "scripts", "web-scraping", "productivity"]
 avgRating: 4.5
 reviewCount: 134
 salesCount: 6780

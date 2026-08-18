@@ -17,6 +17,8 @@ interface ProductCardProps {
     salesCount?: number;
     isFeatured?: boolean;
     isTrending?: boolean;
+    isDemo?: boolean;
+    tags?: string[];
   };
   variant?: 'grid' | 'carousel';
 }
@@ -121,6 +123,10 @@ export default function ProductCard({ product, variant = 'grid' }: ProductCardPr
           className="product-card__image"
           loading="lazy"
         />
+        {/* Demo Badge */}
+        {(product.isDemo || product.tags?.some(t => t.toLowerCase() === 'demo')) && (
+          <span className="product-card__demo-badge">Demo</span>
+        )}
         <button
           onClick={handleWishlist}
           className={`product-card__wishlist ${wishlisted ? 'product-card__wishlist--active' : ''}`}

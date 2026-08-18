@@ -9,7 +9,8 @@ coverImage: "/asset/assets/images/products/figma-masterclass.png"
 status: "published"
 isFeatured: true
 isTrending: false
-tags: ["figma", "design", "course", "ui-design", "prototyping"]
+isDemo: true
+tags: ["demo", "figma", "design", "course", "ui-design", "prototyping"]
 avgRating: 4.8
 reviewCount: 156
 salesCount: 3420

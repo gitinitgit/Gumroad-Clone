@@ -18,6 +18,8 @@ interface Product {
   salesCount?: number;
   isFeatured?: boolean;
   isTrending?: boolean;
+  isDemo?: boolean;
+  tags?: string[];
 }
 
 const CATEGORIES = [

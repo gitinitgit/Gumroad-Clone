@@ -42,6 +42,7 @@ export interface StaticProduct {
   isFeatured: boolean;
   isTrending: boolean;
   isArchived: boolean;
+  isDemo: boolean;
   callToAction: string;
   images: string[];
   reviews: StaticReview[];
@@ -89,7 +90,7 @@ export class StaticProductService {
           coverImage: data.coverImage || '/asset/assets/images/cover_placeholder.png',
           type: data.type || 'digital',
           status: data.status || 'published',
-          tags: data.tags || [],
+          tags: data.tags || ['Demo'],
           category: data.category || '',
           creator: {
             _id: 'static-user',
@@ -106,6 +107,7 @@ export class StaticProductService {
           isFeatured: !!data.isFeatured,
           isTrending: !!data.isTrending,
           isArchived: false,
+          isDemo: data.isDemo !== undefined ? !!data.isDemo : true,
           callToAction: data.callToAction || 'I want this!',
           images: data.images || [data.coverImage || '/asset/assets/images/cover_placeholder.png'],
           reviews: (data.reviews || []).map((r: any) => ({

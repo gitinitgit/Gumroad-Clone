@@ -9,7 +9,8 @@ coverImage: "/asset/assets/images/products/ui-design-system.png"
 status: "published"
 isFeatured: true
 isTrending: true
-tags: ["design", "ui-kit", "figma", "design-system", "components"]
+isDemo: true
+tags: ["demo", "design", "ui-kit", "figma", "design-system", "components"]
 avgRating: 4.9
 reviewCount: 42
 salesCount: 1847

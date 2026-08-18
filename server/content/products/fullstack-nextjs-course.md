@@ -9,7 +9,8 @@ coverImage: "/asset/assets/images/products/fullstack-nextjs.png"
 status: "published"
 isFeatured: true
 isTrending: true
-tags: ["nextjs", "react", "typescript", "fullstack", "web-development"]
+isDemo: true
+tags: ["demo", "nextjs", "react", "typescript", "fullstack", "web-development"]
 avgRating: 4.9
 reviewCount: 237
 salesCount: 4150

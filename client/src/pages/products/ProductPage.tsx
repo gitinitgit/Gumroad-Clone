@@ -26,6 +26,7 @@ interface ProductData {
   type: string;
   tags: string[];
   category: string;
+  isDemo?: boolean;
   creator: { _id: string; name: string; username: string; avatar: string; bio: string };
   avgRating: number;
   reviewCount: number;
@@ -246,6 +247,9 @@ export default function ProductPage() {
 
           {/* Title + Creator */}
           <div className="pdp-header">
+            {(product.isDemo || product.tags?.some(t => t.toLowerCase() === 'demo')) && (
+              <span className="pdp-demo-badge">Demo Product</span>
+            )}
             <h1 className="pdp-header__title">{product.name}</h1>
             <div className="pdp-header__meta">
               <div className="pdp-creator">

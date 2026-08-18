@@ -9,7 +9,8 @@ coverImage: "/asset/assets/images/products/icon-pack.png"
 status: "published"
 isFeatured: false
 isTrending: true
-tags: ["icons", "design", "svg", "ui", "assets"]
+isDemo: true
+tags: ["demo", "icons", "design", "svg", "ui", "assets"]
 avgRating: 4.7
 reviewCount: 89
 salesCount: 5230

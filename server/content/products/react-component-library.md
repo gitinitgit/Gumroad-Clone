@@ -9,7 +9,8 @@ coverImage: "/asset/assets/images/products/react-components.png"
 status: "published"
 isFeatured: true
 isTrending: false
-tags: ["react", "components", "typescript", "storybook", "frontend"]
+isDemo: true
+tags: ["demo", "react", "components", "typescript", "storybook", "frontend"]
 avgRating: 4.6
 reviewCount: 67
 salesCount: 1920
