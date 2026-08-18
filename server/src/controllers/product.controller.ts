@@ -65,7 +65,7 @@ export const getPublicProducts = asyncHandler(async (req: AuthRequest, res: Resp
   const cacheKey = `discover:${pagination.page}:${pagination.limit}:${query.search || ''}:${query.type || ''}:${query.category || ''}:${query.sort || ''}:${query.minPrice ?? ''}:${query.maxPrice ?? ''}`;
 
   const cached = await CacheService.get<{ products: any[]; total: number }>(cacheKey);
-  if (cached) {
+  if (cached && Array.isArray(cached.products) && cached.products.length > 0) {
     return ApiResponse.paginated(res, cached.products, cached.total, pagination.page, pagination.limit, 'Products retrieved');
   }
 
@@ -76,7 +76,9 @@ export const getPublicProducts = asyncHandler(async (req: AuthRequest, res: Resp
   const products = [...dbData.products, ...staticData.products];
   const total = dbData.total + staticData.total;
 
-  await CacheService.set(cacheKey, { products, total }, CACHE_TTL.DISCOVER_PRODUCTS);
+  if (products.length > 0) {
+    await CacheService.set(cacheKey, { products, total }, CACHE_TTL.DISCOVER_PRODUCTS);
+  }
 
   ApiResponse.paginated(res, products, total, pagination.page, pagination.limit, 'Products retrieved');
 });
@@ -118,8 +120,8 @@ export const removeProductFile = asyncHandler(async (req: AuthRequest, res: Resp
 
 export const getFeaturedProducts = asyncHandler(async (_req: AuthRequest, res: Response) => {
   const cacheKey = 'featured';
-  const cached = await CacheService.get(cacheKey);
-  if (cached) {
+  const cached = await CacheService.get<any[]>(cacheKey);
+  if (cached && Array.isArray(cached) && cached.length > 0) {
     return ApiResponse.success(res, cached, 'Featured products retrieved');
   }
 
@@ -128,14 +130,16 @@ export const getFeaturedProducts = asyncHandler(async (_req: AuthRequest, res: R
   const staticProducts = await StaticProductService.getFeatured().catch(() => []);
   const products = [...dbProducts, ...staticProducts];
 
-  await CacheService.set(cacheKey, products, CACHE_TTL.FEATURED_PRODUCTS);
+  if (products.length > 0) {
+    await CacheService.set(cacheKey, products, CACHE_TTL.FEATURED_PRODUCTS);
+  }
   ApiResponse.success(res, products, 'Featured products retrieved');
 });
 
 export const getTrendingProducts = asyncHandler(async (_req: AuthRequest, res: Response) => {
   const cacheKey = 'trending';
-  const cached = await CacheService.get(cacheKey);
-  if (cached) {
+  const cached = await CacheService.get<any[]>(cacheKey);
+  if (cached && Array.isArray(cached) && cached.length > 0) {
     return ApiResponse.success(res, cached, 'Trending products retrieved');
   }
 
@@ -144,7 +148,9 @@ export const getTrendingProducts = asyncHandler(async (_req: AuthRequest, res: R
   const staticProducts = await StaticProductService.getTrending().catch(() => []);
   const products = [...dbProducts, ...staticProducts];
 
-  await CacheService.set(cacheKey, products, CACHE_TTL.TRENDING_PRODUCTS);
+  if (products.length > 0) {
+    await CacheService.set(cacheKey, products, CACHE_TTL.TRENDING_PRODUCTS);
+  }
   ApiResponse.success(res, products, 'Trending products retrieved');
 });
 

@@ -4,7 +4,22 @@ import matter from 'gray-matter';
 import slugify from 'slugify';
 import { logger } from '../utils/logger';
 
-const PRODUCTS_DIR = path.join(__dirname, '../../content/products');
+function getProductsDir(): string {
+  const candidates = [
+    path.join(__dirname, '../../content/products'),
+    path.join(__dirname, '../content/products'),
+    path.join(process.cwd(), 'server/content/products'),
+    path.join(process.cwd(), 'content/products'),
+    path.resolve('/app/server/content/products'),
+    path.resolve('/app/content/products'),
+  ];
+  for (const dir of candidates) {
+    if (fs.existsSync(dir)) {
+      return dir;
+    }
+  }
+  return candidates[0];
+}
 
 export interface StaticReview {
   author: string;
@@ -61,16 +76,18 @@ export class StaticProductService {
       return this.cache;
     }
 
-    if (!fs.existsSync(PRODUCTS_DIR)) {
+    const productsDir = getProductsDir();
+    if (!fs.existsSync(productsDir)) {
+      logger.warn(`Static products directory not found. Checked: ${productsDir}`);
       return [];
     }
 
-    const files = fs.readdirSync(PRODUCTS_DIR);
+    const files = fs.readdirSync(productsDir);
     const mdFiles = files.filter(f => f.endsWith('.md'));
 
     const products = mdFiles.map(file => {
       try {
-        const filePath = path.join(PRODUCTS_DIR, file);
+        const filePath = path.join(productsDir, file);
         const content = fs.readFileSync(filePath, 'utf-8');
         const { data, content: body } = matter(content);
         

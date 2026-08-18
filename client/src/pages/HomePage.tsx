@@ -2,6 +2,55 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import api from '../services/api';
+import ProductCard from '../components/ProductCard';
+
+const FALLBACK_FEATURED = [
+  {
+    _id: 'fullstack-nextjs-course',
+    name: 'Full-Stack Next.js — Build & Deploy',
+    slug: 'fullstack-nextjs-course',
+    price: 6999,
+    coverImage: '/asset/assets/images/products/fullstack-nextjs.png',
+    type: 'course',
+    category: 'Development',
+    creator: { name: 'Kiran Mehta', avatar: '/asset/assets/images/gumroad-default-avatar-5.png' },
+    avgRating: 4.9,
+    reviewCount: 237,
+    isFeatured: true,
+    isDemo: true,
+    tags: ['demo', 'nextjs', 'react'],
+  },
+  {
+    _id: 'figma-masterclass',
+    name: 'Figma Masterclass — Zero to Pro',
+    slug: 'figma-masterclass',
+    price: 2499,
+    coverImage: '/asset/assets/images/products/figma-masterclass.png',
+    type: 'course',
+    category: 'Design',
+    creator: { name: 'David Park', avatar: '/asset/assets/images/gumroad-default-avatar-5.png' },
+    avgRating: 4.8,
+    reviewCount: 156,
+    isFeatured: true,
+    isDemo: true,
+    tags: ['demo', 'figma', 'design'],
+  },
+  {
+    _id: 'react-component-library',
+    name: 'React Component Library Pro',
+    slug: 'react-component-library',
+    price: 3499,
+    coverImage: '/asset/assets/images/products/react-components.png',
+    type: 'digital',
+    category: 'Development',
+    creator: { name: 'Jordan Blake', avatar: '/asset/assets/images/gumroad-default-avatar-5.png' },
+    avgRating: 4.6,
+    reviewCount: 67,
+    isFeatured: true,
+    isDemo: true,
+    tags: ['demo', 'react', 'typescript'],
+  },
+];
 
 const features = [
   {
@@ -47,7 +96,7 @@ interface Product {
 }
 
 export default function HomePage() {
-  const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
+  const [featuredProducts, setFeaturedProducts] = useState<any[]>(FALLBACK_FEATURED);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -57,9 +106,13 @@ export default function HomePage() {
   const fetchFeatured = async () => {
     try {
       const { data } = await api.get('/products/featured');
-      setFeaturedProducts(data.data || []);
+      if (data.data && data.data.length > 0) {
+        setFeaturedProducts(data.data);
+      } else {
+        setFeaturedProducts(FALLBACK_FEATURED);
+      }
     } catch {
-      // Fallback
+      setFeaturedProducts(FALLBACK_FEATURED);
     } finally {
       setLoading(false);
     }
@@ -111,22 +164,13 @@ export default function HomePage() {
           {loading ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {[...Array(3)].map((_, i) => (
-                <div key={i} className="card animate-pulse h-64" />
+                <div key={i} className="product-card-skeleton" />
               ))}
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {featuredProducts.map((product) => (
-                <Link key={product._id} to={`/products/${product.slug}`} className="card-hover">
-                  <div className="aspect-video bg-gray-100 rounded-gum mb-4 overflow-hidden border-2 border-gumroad-black">
-                    <img src={product.coverImage} alt={product.name} className="w-full h-full object-cover" />
-                  </div>
-                  <h3 className="font-bold text-sm mb-1 line-clamp-1">{product.name}</h3>
-                  <div className="flex items-center justify-between mt-2">
-                    <span className="text-xs text-gray-500">By {product.creator?.name}</span>
-                    <span className="badge-pink text-xs">₹{product.price}</span>
-                  </div>
-                </Link>
+                <ProductCard key={product._id} product={product} />
               ))}
             </div>
           )}
