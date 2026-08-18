@@ -101,7 +101,7 @@ const userSchema = new Schema<IUser>(
     timestamps: true,
     toJSON: {
       transform(_doc, ret) {
-        const result = { ...ret };
+        const result = { ...ret } as Record<string, any>;
         delete result.__v;
         return result;
       },

@@ -16,7 +16,7 @@ export class UserService {
 
   static async updateProfile(userId: string, updates: Partial<IUser>): Promise<IUser> {
     // Prevent updating sensitive fields directly
-    const { password, role, isBlocked, refreshTokens, ...safeUpdates } = updates as any;
+    const { role, isBlocked, ...safeUpdates } = updates as any;
 
     const user = await User.findByIdAndUpdate(userId, safeUpdates, {
       new: true,
@@ -36,16 +36,8 @@ export class UserService {
     return user;
   }
 
-  static async changePassword(userId: string, currentPassword: string, newPassword: string): Promise<void> {
-    const user = await User.findById(userId).select('+password');
-    if (!user) throw ApiError.notFound('User not found');
-
-    const isMatch = await user.comparePassword(currentPassword);
-    if (!isMatch) throw ApiError.badRequest('Current password is incorrect');
-
-    user.password = newPassword;
-    user.refreshTokens = []; // Invalidate all sessions
-    await user.save();
+  static async changePassword(_userId: string, _currentPassword: string, _newPassword: string): Promise<void> {
+    throw ApiError.badRequest('Password management is handled via Clerk');
   }
 
   static async upgradeToCreator(userId: string): Promise<IUser> {
