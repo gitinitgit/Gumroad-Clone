@@ -48,6 +48,19 @@ export const getProductBySlug = asyncHandler(async (req: AuthRequest, res: Respo
   ApiResponse.success(res, product, 'Product retrieved');
 });
 
+function deduplicateProducts(products: any[]): any[] {
+  const seen = new Set<string>();
+  const result: any[] = [];
+  for (const p of products) {
+    const key = (p.slug || p._id?.toString() || p.name || '').toLowerCase();
+    if (key && !seen.has(key)) {
+      seen.add(key);
+      result.push(p);
+    }
+  }
+  return result;
+}
+
 export const getPublicProducts = asyncHandler(async (req: AuthRequest, res: Response) => {
   const pagination = parsePagination(req.query as any);
   const query = {
@@ -73,8 +86,8 @@ export const getPublicProducts = asyncHandler(async (req: AuthRequest, res: Resp
   const dbData = await ProductService.getPublicProducts(query).catch(() => ({ products: [], total: 0 }));
   const staticData = await StaticProductService.getPublicProducts(query).catch(() => ({ products: [], total: 0 }));
 
-  const products = [...dbData.products, ...staticData.products];
-  const total = dbData.total + staticData.total;
+  const products = deduplicateProducts([...dbData.products, ...staticData.products]);
+  const total = products.length;
 
   if (products.length > 0) {
     await CacheService.set(cacheKey, { products, total }, CACHE_TTL.DISCOVER_PRODUCTS);
@@ -128,7 +141,7 @@ export const getFeaturedProducts = asyncHandler(async (_req: AuthRequest, res: R
   // Merge DB and Static featured products
   const dbProducts = await ProductService.getFeatured().catch(() => []);
   const staticProducts = await StaticProductService.getFeatured().catch(() => []);
-  const products = [...dbProducts, ...staticProducts];
+  const products = deduplicateProducts([...dbProducts, ...staticProducts]);
 
   if (products.length > 0) {
     await CacheService.set(cacheKey, products, CACHE_TTL.FEATURED_PRODUCTS);
@@ -146,7 +159,7 @@ export const getTrendingProducts = asyncHandler(async (_req: AuthRequest, res: R
   // Merge DB and Static trending products
   const dbProducts = await ProductService.getFeatured().catch(() => []); // fallback logic
   const staticProducts = await StaticProductService.getTrending().catch(() => []);
-  const products = [...dbProducts, ...staticProducts];
+  const products = deduplicateProducts([...dbProducts, ...staticProducts]);
 
   if (products.length > 0) {
     await CacheService.set(cacheKey, products, CACHE_TTL.TRENDING_PRODUCTS);
